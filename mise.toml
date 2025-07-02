@@ -1,0 +1,22 @@
+[tools]
+go = "1.24"
+
+[tasks.build]
+run = "go build -o bin/codegraphgen ."
+
+[tasks.services]
+run = "docker-compose -f docker-compose.services.yml up"
+
+[tasks.run]
+alias = "dev"
+run = "go run . codebase . --memgraph"
+
+[tasks.memory]
+alias = "dev"
+run = "go run . codebase ."
+
+[tasks.air]
+# run = "go run github.com/air-verse/air@latest -c .air.toml"
+
+[tasks.test]
+run = "go test ./..."
