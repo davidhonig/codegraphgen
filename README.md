@@ -10,6 +10,7 @@ A powerful CLI tool for analyzing codebases and generating knowledge graphs. Cod
   - In-memory database for fast analysis
   - Memgraph integration for persistent storage and advanced queries
 - **CLI Interface**: Easy-to-use command-line interface built with Cobra
+- **REST API Server**: Echo-based web server with REST endpoints for programmatic access
 - **Text Processing**: Extracts entities and relationships from documentation and text files
 - **Statistics and Reporting**: Comprehensive analysis of code complexity and dependencies
 
@@ -137,12 +138,16 @@ codegraphgen file [file-path]
 
 # Display knowledge graph statistics
 codegraphgen stats
+
+# Start the REST API server
+codegraphgen server
 ```
 
 ### Global Flags
 
 - `--memgraph`: Use Memgraph database instead of in-memory storage
 - `--verbose`, `-v`: Enable verbose output
+- `--port`, `-p`: Specify port for server command (default: 8080)
 
 ### Analyze Codebase
 
@@ -204,6 +209,118 @@ codegraphgen stats
 codegraphgen stats --memgraph
 ```
 
+### Start REST API Server
+
+Launch the web server for programmatic access:
+
+```bash
+# Start server on default port (8080)
+codegraphgen server
+
+# Start server on custom port with in-memory database
+codegraphgen server --port 3000
+
+# Start server with Memgraph database
+codegraphgen server --memgraph
+
+# Start server with verbose logging
+codegraphgen server --verbose --port 8080
+```
+
+## REST API Endpoints
+
+When running the server, the following REST API endpoints are available:
+
+### Analysis Endpoints
+
+**POST /api/analyze/text**
+
+```bash
+curl -X POST http://localhost:8080/api/analyze/text \
+  -H "Content-Type: application/json" \
+  -d '{"text": "function calculateSum(a, b) { return a + b; }"}'
+```
+
+**POST /api/analyze/file**
+
+```bash
+curl -X POST http://localhost:8080/api/analyze/file \
+  -H "Content-Type: application/json" \
+  -d '{"filePath": "./src/main.go"}'
+```
+
+**POST /api/analyze/codebase**
+
+```bash
+curl -X POST http://localhost:8080/api/analyze/codebase \
+  -H "Content-Type: application/json" \
+  -d '{"directory": "./my-project"}'
+```
+
+### Query Endpoints
+
+**GET /api/stats**
+
+```bash
+curl http://localhost:8080/api/stats
+```
+
+**GET /api/entities**
+
+```bash
+curl http://localhost:8080/api/entities
+```
+
+**GET /api/relationships**
+
+```bash
+curl http://localhost:8080/api/relationships
+```
+
+**GET /api/query**
+
+```bash
+curl "http://localhost:8080/api/query?q=MATCH (n:FUNCTION) RETURN n"
+```
+
+**GET /health**
+
+```bash
+curl http://localhost:8080/health
+```
+
+## Using as a Library
+
+The REST server can also be used as a library in your Go applications:
+
+```go
+package main
+
+import (
+    "log"
+    "codegraphgen/pkg/rest"
+)
+
+func main() {
+    config := rest.Config{
+        Port:        8080,
+        Verbose:     true,
+        UseMemgraph: false,
+    }
+
+    server, err := rest.NewServer(config)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Start the server
+    log.Fatal(server.Start())
+}
+```
+
+This allows you to embed the CodeGraphGen REST API into your own applications.
+```
+
 ### Example Output
 
 When analyzing a codebase, you'll see output like this:
@@ -261,7 +378,11 @@ codegraphgen/
 │   ├── text.go            # Text analysis command
 │   ├── file.go            # File analysis command
 │   ├── stats.go           # Statistics command
+│   ├── server.go          # REST API server command
 │   └── utils.go           # Shared utilities
+├── pkg/                   # Public packages
+│   └── rest/              # REST API server
+│       └── server.go      # Echo-based HTTP server
 ├── internal/
 │   └── core/              # Core analysis logic
 │       ├── analyzer.go    # Analyzer registry
@@ -287,11 +408,12 @@ codegraphgen/
 ### Core Components
 
 1. **CLI Commands (`cmd/`)**: Cobra-based command-line interface
-2. **Code Processor**: Orchestrates file analysis and language detection
-3. **Analyzer Registry**: Manages language-specific analyzers
-4. **Language Analyzers**: Extract entities and relationships for specific languages
-5. **Database Abstraction**: Supports multiple storage backends
-6. **Knowledge Graph Generator**: Coordinates the entire analysis pipeline
+2. **REST API Server (`pkg/rest/`)**: Echo-based web server with JSON API endpoints - publicly exportable package
+3. **Code Processor**: Orchestrates file analysis and language detection
+4. **Analyzer Registry**: Manages language-specific analyzers
+5. **Language Analyzers**: Extract entities and relationships for specific languages
+6. **Database Abstraction**: Supports multiple storage backends
+7. **Knowledge Graph Generator**: Coordinates the entire analysis pipeline
 
 ### Go-Specific Analysis
 
@@ -410,6 +532,9 @@ The Go analysis can be extended by:
 ## Dependencies
 
 - `github.com/google/uuid`: For generating unique entity IDs
+- `github.com/spf13/cobra`: CLI framework
+- `github.com/labstack/echo/v4`: Web framework for REST API
+- `github.com/neo4j/neo4j-go-driver/v5`: Memgraph/Neo4j database driver
 
 ## License
 

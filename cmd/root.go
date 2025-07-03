@@ -20,6 +20,7 @@ var rootCmd = &cobra.Command{
 It can extract entities and relationships from source code and store them in various databases.
 
 Examples:
+  codegraphgen server
   codegraphgen codebase ./my-project
   codegraphgen codebase . --memgraph
   codegraphgen text "your text here"

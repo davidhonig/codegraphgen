@@ -7,16 +7,17 @@ run = "go build -o bin/codegraphgen ."
 [tasks.services]
 run = "docker-compose -f docker-compose.services.yml up"
 
-[tasks.run]
-alias = "dev"
+[tasks.analyze-local]
 run = "go run . codebase . --memgraph"
 
-[tasks.memory]
-alias = "dev"
+[tasks.analyze-local-inmem]
 run = "go run . codebase ."
 
-[tasks.air]
-# run = "go run github.com/air-verse/air@latest -c .air.toml"
+[tasks.dev]
+run = "go run github.com/air-verse/air@v1.52.3"
+
+[tasks.run]
+run = "go run . server --memgraph --port 8081"
 
 [tasks.test]
 run = "go test ./..."
