@@ -319,6 +319,7 @@ func main() {
 ```
 
 This allows you to embed the CodeGraphGen REST API into your own applications.
+
 ```
 
 ### Example Output
@@ -326,6 +327,7 @@ This allows you to embed the CodeGraphGen REST API into your own applications.
 When analyzing a codebase, you'll see output like this:
 
 ```
+
 🔍 Analyzing codebase at: ./my-project
 🧠 Using in-memory database
 ✅ Found 45 entities and 67 relationships
@@ -335,35 +337,36 @@ Entities: 45
 Relationships: 67
 
 📊 Entity Types:
-  PACKAGE: 1
-  IMPORT: 8
-  STRUCT: 6
-  FUNCTION: 12
-  METHOD: 8
-  INTERFACE: 3
-  TYPE: 4
-  CONSTANT: 3
+PACKAGE: 1
+IMPORT: 8
+STRUCT: 6
+FUNCTION: 12
+METHOD: 8
+INTERFACE: 3
+TYPE: 4
+CONSTANT: 3
 
 🔗 Relationship Types:
-  IMPORTS: 8
-  CONTAINS: 18
-  BELONGS_TO: 15
-  CALLS: 12
-  DEFINES: 14
+IMPORTS: 8
+CONTAINS: 18
+BELONGS_TO: 15
+CALLS: 12
+DEFINES: 14
 
 🎯 Sample Entities:
-  main (PACKAGE) - map[path:.]
-  fmt (IMPORT) - map[path:fmt]
-  User (STRUCT) - map[fields:[ID Name] sourceFile:main.go]
-  GetName (METHOD) - map[receiver:*User returnType:string sourceFile:main.go]
-  main (FUNCTION) - map[parameters:[] sourceFile:main.go]
+main (PACKAGE) - map[path:.]
+fmt (IMPORT) - map[path:fmt]
+User (STRUCT) - map[fields:[ID Name] sourceFile:main.go]
+GetName (METHOD) - map[receiver:*User returnType:string sourceFile:main.go]
+main (FUNCTION) - map[parameters:[] sourceFile:main.go]
 
 🔗 Sample Relationships:
-  main -> fmt (IMPORTS)
-  User -> ID (CONTAINS)
-  User -> Name (CONTAINS)
-  GetName -> User (BELONGS_TO)
-  main -> GetName (CALLS)
+main -> fmt (IMPORTS)
+User -> ID (CONTAINS)
+User -> Name (CONTAINS)
+GetName -> User (BELONGS_TO)
+main -> GetName (CALLS)
+
 ```
 
 ## Architecture
@@ -371,39 +374,41 @@ Relationships: 67
 ### Project Structure
 
 ```
+
 codegraphgen/
-├── cmd/                    # Cobra CLI commands
-│   ├── root.go            # Root command and global flags
-│   ├── codebase.go        # Codebase analysis command
-│   ├── text.go            # Text analysis command
-│   ├── file.go            # File analysis command
-│   ├── stats.go           # Statistics command
-│   ├── server.go          # REST API server command
-│   └── utils.go           # Shared utilities
-├── pkg/                   # Public packages
-│   └── rest/              # REST API server
-│       └── server.go      # Echo-based HTTP server
+├── cmd/ # Cobra CLI commands
+│ ├── root.go # Root command and global flags
+│ ├── codebase.go # Codebase analysis command
+│ ├── text.go # Text analysis command
+│ ├── file.go # File analysis command
+│ ├── stats.go # Statistics command
+│ ├── server.go # REST API server command
+│ └── utils.go # Shared utilities
+├── pkg/ # Public packages
+│ └── rest/ # REST API server
+│ └── server.go # Echo-based HTTP server
 ├── internal/
-│   └── core/              # Core analysis logic
-│       ├── analyzer.go    # Analyzer registry
-│       ├── code_processor.go        # Code analysis orchestration
-│       ├── text_processor.go       # Text processing
-│       ├── knowledge_graph_generator.go  # Main generator
-│       ├── analyzers/     # Language-specific analyzers
-│       │   ├── analyzer.go      # Analyzer interface
-│       │   ├── golang.go        # Go language analyzer
-│       │   ├── typescript.go    # TypeScript/JavaScript analyzer
-│       │   ├── python.go        # Python analyzer
-│       │   ├── java.go          # Java analyzer
-│       │   ├── json.go          # JSON analyzer
-│       │   └── generic.go       # Generic/fallback analyzer
-│       └── graph/         # Graph types and utilities
-│           └── types.go   # Entity and relationship definitions
-├── db/                    # Database implementations
-│   ├── inmemory.go       # In-memory database
-│   └── memgraph.go       # Memgraph database connector
-└── main.go               # Application entry point
-```
+│ └── core/ # Core analysis logic
+│ ├── analyzer.go # Analyzer registry
+│ ├── code_processor.go # Code analysis orchestration
+│ ├── text_processor.go # Text processing
+│ ├── knowledge_graph_generator.go # Main generator
+│ ├── analyzers/ # Language-specific analyzers
+│ │ ├── analyzer.go # Analyzer interface
+│ │ ├── golang.go # Go language analyzer
+│ │ ├── typescript.go # TypeScript/JavaScript analyzer
+│ │ ├── python.go # Python analyzer
+│ │ ├── java.go # Java analyzer
+│ │ ├── json.go # JSON analyzer
+│ │ └── generic.go # Generic/fallback analyzer
+│ └── graph/ # Graph types and utilities
+│ └── types.go # Entity and relationship definitions
+├── db/ # Database implementations
+│ ├── inmemory.go # In-memory database
+│ └── memgraph.go # Memgraph database connector
+└── main.go # Application entry point
+
+````
 
 ### Core Components
 
@@ -496,7 +501,7 @@ results, err := generator.GetEntityConnections("entity-id")
 
 // Get graph statistics
 stats, err := generator.GetGraphStatistics()
-```
+````
 
 ### Codebase Metrics
 
