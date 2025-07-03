@@ -320,7 +320,6 @@ func main() {
 
 This allows you to embed the CodeGraphGen REST API into your own applications.
 
-```
 
 ### Example Output
 
@@ -374,7 +373,6 @@ main -> GetName (CALLS)
 ### Project Structure
 
 ```
-
 codegraphgen/
 ├── cmd/ # Cobra CLI commands
 │ ├── root.go # Root command and global flags
@@ -407,7 +405,6 @@ codegraphgen/
 │ ├── inmemory.go # In-memory database
 │ └── memgraph.go # Memgraph database connector
 └── main.go # Application entry point
-
 ````
 
 ### Core Components
